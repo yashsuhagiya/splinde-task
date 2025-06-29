@@ -1,6 +1,12 @@
 import { useState } from "react";
 import type { Entry, ComputedSection } from "@/lib/types";
-import { FaChevronDown, FaChevronRight, FaPlus, FaTrash, FaFolderPlus } from "react-icons/fa";
+import {
+    FaChevronDown,
+    FaChevronRight,
+    FaPlus,
+    FaTrash,
+    FaFolderPlus,
+} from "react-icons/fa";
 import toast from "react-hot-toast";
 
 type Props = {
@@ -20,7 +26,10 @@ export function TreeNode({ node, onUpdate, onDelete, level = 0 }: Props) {
 
     const indent = level * 20;
 
-    const handleChildUpdate = (childIndex: number, updatedChild: Entry | ComputedSection) => {
+    const handleChildUpdate = (
+        childIndex: number,
+        updatedChild: Entry | ComputedSection
+    ) => {
         if ("children" in node) {
             const updatedChildren = [...node.children];
             updatedChildren[childIndex] = updatedChild;
@@ -35,7 +44,7 @@ export function TreeNode({ node, onUpdate, onDelete, level = 0 }: Props) {
                 name: "New Entry",
                 sum: 0,
                 note: "",
-                id: Math.random().toString(36).substr(2, 9)
+                id: Math.random().toString(36).substr(2, 9),
             };
             const updatedChildren = [...node.children, newEntry];
             const updatedNode = { ...node, children: updatedChildren };
@@ -49,7 +58,7 @@ export function TreeNode({ node, onUpdate, onDelete, level = 0 }: Props) {
                 name: "New Section",
                 children: [],
                 computedSum: 0,
-                id: Math.random().toString(36).substr(2, 9)
+                id: Math.random().toString(36).substr(2, 9),
             };
             const updatedChildren = [...node.children, newSection];
             const updatedNode = { ...node, children: updatedChildren };
@@ -59,7 +68,9 @@ export function TreeNode({ node, onUpdate, onDelete, level = 0 }: Props) {
 
     const handleDeleteChild = (childId: string) => {
         if ("children" in node) {
-            const updatedChildren = node.children.filter((child) => child.id !== childId);
+            const updatedChildren = node.children.filter(
+                (child) => child.id !== childId
+            );
             const updatedNode = { ...node, children: updatedChildren };
             onUpdate(updatedNode);
         }
