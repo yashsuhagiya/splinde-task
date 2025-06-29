@@ -68,55 +68,64 @@ export function TreeNode({ node, onUpdate, onDelete, level = 0 }: Props) {
     // Entry node (leaf)
     if ("sum" in node) {
         return (
-            <div className="relative group mb-3" style={{ marginLeft: indent }}>
-                <div className="bg-white border border-gray-200 shadow-sm rounded p-4">
-                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-                        <input
-                            className="font-medium text-gray-800 bg-transparent border-none focus:outline-none focus:bg-gray-50 focus:px-2 focus:py-1 focus:rounded"
-                            value={localName}
-                            onChange={(e) => setLocalName(e.target.value)}
-                            onBlur={() => {
-                                const updatedNode = { ...node, name: localName };
-                                onUpdate(updatedNode);
-                            }}
-                        />
-                        <div className="flex items-center gap-2">
-                            <input
-                                className="border border-gray-300 rounded px-2 py-1 w-24 text-right text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-300"
-                                type="number"
-                                value={localSum}
-                                onChange={(e) => setLocalSum(e.target.value)}
-                                onBlur={() => {
-                                    const updatedNode = { ...node, sum: parseFloat(localSum) };
-                                    onUpdate(updatedNode);
-                                }}
-                            />
-                            {onDelete && (
-                                <button
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        onDelete();
-                                    }}
-                                    className="text-red-500 hover:text-red-700 hover:bg-red-50 p-2 rounded"
-                                    title="Delete entry"
-                                >
-                                    <FaTrash size={12} />
-                                </button>
-                            )}
-                        </div>
-                    </div>
-                    <textarea
-                        className="mt-2 border border-gray-300 rounded px-3 py-2 w-full text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-300"
-                        value={localNote}
-                        placeholder="Note..."
-                        onChange={(e) => setLocalNote(e.target.value)}
-                        onBlur={() => {
-                            const updatedNode = { ...node, note: localNote };
-                            onUpdate(updatedNode);
-                        }}
+          <div
+            className="relative group mb-2"
+            style={{ marginLeft: Math.min(indent, 40) }}
+          >
+            <div className="bg-white border border-gray-200 shadow-sm rounded p-3">
+              <div className="flex flex-col gap-2">
+                <div className="flex items-center justify-between gap-2">
+                  <input
+                    className="font-medium text-gray-800 bg-transparent border-none focus:outline-none focus:bg-gray-50 focus:px-2 focus:py-1 focus:rounded flex-1 min-w-0"
+                    value={localName}
+                    onChange={(e) => setLocalName(e.target.value)}
+                    onBlur={() => {
+                      const updatedNode = { ...node, name: localName };
+                      onUpdate(updatedNode);
+                    }}
+                  />
+                  <div className="flex items-center gap-1 flex-shrink-0">
+                    <input
+                      className="border border-gray-300 rounded px-2 py-1 w-16 sm:w-20 text-right text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-300 text-sm"
+                      type="number"
+                      value={localSum}
+                      onChange={(e) => setLocalSum(e.target.value)}
+                      onBlur={() => {
+                        const updatedNode = {
+                          ...node,
+                          sum: parseFloat(localSum),
+                        };
+                        onUpdate(updatedNode);
+                      }}
                     />
+                    {onDelete && (
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onDelete();
+                        }}
+                        className="text-red-500 hover:text-red-700 hover:bg-red-50 p-1.5 rounded flex-shrink-0"
+                        title="Delete entry"
+                      >
+                        <FaTrash size={10} />
+                      </button>
+                    )}
+                  </div>
                 </div>
+                <textarea
+                  className="border border-gray-300 rounded px-3 py-2 w-full text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-300"
+                  value={localNote}
+                  placeholder="Note..."
+                  rows={2}
+                  onChange={(e) => setLocalNote(e.target.value)}
+                  onBlur={() => {
+                    const updatedNode = { ...node, note: localNote };
+                    onUpdate(updatedNode);
+                  }}
+                />
+              </div>
             </div>
+          </div>
         );
     }
 
@@ -124,91 +133,100 @@ export function TreeNode({ node, onUpdate, onDelete, level = 0 }: Props) {
     const hasChildren = node.children && node.children.length > 0;
 
     return (
-        <div className="relative group mb-3" style={{ marginLeft: indent }}>
-            <div className="bg-gray-50 border border-gray-200 shadow-inner rounded p-4">
-                <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                        {hasChildren ? (
-                            <button
-                                className="text-blue-600 hover:bg-blue-50 p-1 rounded"
-                                onClick={() => setCollapsed(!collapsed)}
-                                aria-label={collapsed ? "Expand" : "Collapse"}
-                            >
-                                {collapsed ? <FaChevronRight /> : <FaChevronDown />}
-                            </button>
-                        ) : (
-                            <span className="w-5" />
-                        )}
-                        <input
-                            className="font-semibold text-gray-800 bg-transparent border-none focus:outline-none focus:bg-gray-50 focus:px-2 focus:py-1 focus:rounded"
-                            value={localName}
-                            onChange={(e) => setLocalName(e.target.value)}
-                            onBlur={() => {
-                                const updatedNode = { ...node, name: localName };
-                                onUpdate(updatedNode);
-                            }}
-                        />
-                    </div>
-                    <div className="flex items-center gap-2">
-                        <span className="text-sm text-gray-600 bg-white px-2 py-0.5 rounded border border-gray-200">
-                            Sum: {node.computedSum}
-                        </span>
-                        <div className="flex gap-2">
-                            <button
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    handleAddEntry();
-                                    toast.success("Entry added!");
-                                }}
-                                className="text-green-600 hover:bg-green-50 p-2 rounded"
-                                title="Add entry"
-                            >
-                                <FaPlus size={12} />
-                            </button>
-                            <button
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    handleAddSection();
-                                    toast.success("Section added!");
-                                }}
-                                className="text-blue-600 hover:bg-blue-50 p-2 rounded"
-                                title="Add section"
-                            >
-                                <FaFolderPlus size={12} />
-                            </button>
-                            {onDelete && (
-                                <button
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        onDelete();
-                                    }}
-                                    className="text-red-500 hover:text-red-700 hover:bg-red-50 p-2 rounded"
-                                    title="Delete section"
-                                >
-                                    <FaTrash size={12} />
-                                </button>
-                            )}
-                        </div>
-                    </div>
-                </div>
-
-                {!collapsed && hasChildren && (
-                    <div className="mt-3">
-                        {node.children.map((child, i) => (
-                            <TreeNode
-                                key={child.id || i}
-                                node={child}
-                                onUpdate={(updatedChild) => handleChildUpdate(i, updatedChild)}
-                                onDelete={() => {
-                                    handleDeleteChild(child.id || `temp-${i}`);
-                                    toast.success("Item deleted!");
-                                }}
-                                level={level + 1}
-                            />
-                        ))}
-                    </div>
-                )}
+      <div
+        className="relative group mb-2"
+        style={{ marginLeft: Math.min(indent, 40) }}
+      >
+        <div className="bg-gray-50 border border-gray-200 shadow-inner rounded p-3">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-2">
+            <div className="flex items-center gap-2 flex-1 min-w-0">
+              {hasChildren ? (
+                <button
+                  className="text-blue-600 hover:bg-blue-50 p-1 rounded flex-shrink-0"
+                  onClick={() => setCollapsed(!collapsed)}
+                  aria-label={collapsed ? "Expand" : "Collapse"}
+                >
+                  {collapsed ? (
+                    <FaChevronRight size={10} />
+                  ) : (
+                    <FaChevronDown size={10} />
+                  )}
+                </button>
+              ) : (
+                <span className="w-3 flex-shrink-0" />
+              )}
+              <input
+                className="font-semibold text-gray-800 bg-transparent border-none focus:outline-none focus:bg-gray-50 focus:px-2 focus:py-1 focus:rounded flex-1 min-w-0 text-sm sm:text-base"
+                value={localName}
+                onChange={(e) => setLocalName(e.target.value)}
+                onBlur={() => {
+                  const updatedNode = { ...node, name: localName };
+                  onUpdate(updatedNode);
+                }}
+              />
             </div>
+            <div className="flex items-center gap-1 sm:gap-2 flex-shrink-0">
+              <span className="text-xs sm:text-sm text-gray-600 bg-white px-2 py-1 rounded border border-gray-200">
+                Sum: {node.computedSum}
+              </span>
+              <div className="flex gap-1">
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleAddEntry();
+                    toast.success("Entry added!");
+                  }}
+                  className="text-green-600 hover:bg-green-50 p-1.5 rounded"
+                  title="Add entry"
+                >
+                  <FaPlus size={10} />
+                </button>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleAddSection();
+                    toast.success("Section added!");
+                  }}
+                  className="text-blue-600 hover:bg-blue-50 p-1.5 rounded"
+                  title="Add section"
+                >
+                  <FaFolderPlus size={10} />
+                </button>
+                {onDelete && (
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onDelete();
+                    }}
+                    className="text-red-500 hover:text-red-700 hover:bg-red-50 p-1.5 rounded"
+                    title="Delete section"
+                  >
+                    <FaTrash size={10} />
+                  </button>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {!collapsed && hasChildren && (
+            <div className="mt-3">
+              {node.children.map((child, i) => (
+                <TreeNode
+                  key={child.id || i}
+                  node={child}
+                  onUpdate={(updatedChild) =>
+                    handleChildUpdate(i, updatedChild)
+                  }
+                  onDelete={() => {
+                    handleDeleteChild(child.id || `temp-${i}`);
+                    toast.success("Item deleted!");
+                  }}
+                  level={level + 1}
+                />
+              ))}
+            </div>
+          )}
         </div>
+      </div>
     );
 }
