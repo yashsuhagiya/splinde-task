@@ -50,8 +50,8 @@ This project displays a nested tree structure representing an "Annual Report" wi
 
 1. Clone the repository:
 ```bash
-git clone <repository-url>
-cd splinde-next
+git clone https://github.com/yashsuhagiya/splinde-task
+cd splinde-task
 ```
 
 2. Install dependencies:
