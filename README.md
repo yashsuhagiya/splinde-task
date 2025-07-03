@@ -28,6 +28,12 @@ This project displays a nested tree structure representing an "Annual Report" wi
 - **State Management**: React hooks for local state and real-time updates
 - **Sum Calculation**: Frontend computation of nested sums with automatic recalculation on edits
 
+### Deployment & Infrastructure
+- **Docker**: Multi-stage Dockerfile for optimized production builds
+- **Docker Compose**: Separate profiles for development and production
+- **Development**: Hot reloading with volume mounting
+- **Production**: Optimized standalone build with minimal image size
+
 ### Key Features
 - ✅ Backend API serving demo data
 - ✅ Computed sum calculation and display
@@ -38,6 +44,8 @@ This project displays a nested tree structure representing an "Annual Report" wi
 - ✅ Dynamic add/remove functionality for entries and sections
 - ✅ Toast notifications for user feedback
 - ✅ Unique ID system preventing data corruption during operations
+- ✅ Docker containerization for easy deployment
+- ✅ Mobile-responsive design
 - ✅ Responsive design supporting deeply nested trees
 
 ## Getting Started
@@ -54,29 +62,53 @@ git clone https://github.com/yashsuhagiya/splinde-task
 cd splinde-task
 ```
 
-2. Install dependencies:
-```bash
-npm install
-# or
-yarn install
-# or
-pnpm install
-```
+2. **Option A: Local Development**
+   Install dependencies:
+   ```bash
+   pnpm install
+   # or
+   npm install
+   # or
+   yarn install
+   ```
 
-This will install the required packages including:
-- `react-icons` for interactive UI icons
-- `react-hot-toast` for toast notifications
+   Run the development server:
+   ```bash
+   pnpm run dev
+   # or
+   npm run dev
+   # or
+   yarn dev
+   ```
 
-3. Run the development server:
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
+3. **Option B: Docker Development** 
+   Prerequisites: Docker and Docker Compose installed
+   Note: Docker containers use pnpm for optimized builds
+   
+   Start development server with hot reloading:
+   ```bash
+   make dev
+   # or
+   docker-compose --profile dev up --build
+   ```
+
+   Start production server:
+   ```bash
+   make prod
+   # or
+   docker-compose --profile prod up --build -d
+   ```
 
 4. Open [http://localhost:3000](http://localhost:3000) in your browser
+
+### Docker Commands
+
+The project includes a Makefile for easy Docker operations:
+- `make dev` - Start development server with hot reloading
+- `make prod` - Start production server  
+- `make stop` - Stop all containers
+- `make clean` - Remove all containers and images
+- `make logs` - Show container logs
 
 ### Usage
 
